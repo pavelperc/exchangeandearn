@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
 	// security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
@@ -39,4 +39,7 @@ dependencies {
 	
 	// lombok
 	implementation 'org.projectlombok:lombok'
+	
+	// guava
+	implementation 'com.google.guava:guava:27.0.1-jre'
 }

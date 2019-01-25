@@ -2,8 +2,8 @@ package com.pavelperc.exchangeandearn.model;
 
 import lombok.Data;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,12 +14,21 @@ public class User {
     private long id;
     private String login;
     private String password;
+    private Boolean active = true;
+    
+    
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
     
     public User() {
     }
     
-    public User(String login, String password) {
+    
+    
+    public User(String login, String password, Set<Role> roles) {
         this.login = login;
         this.password = password;
+        this.roles = roles;
     }
 }
