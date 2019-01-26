@@ -11,4 +11,5 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class ValuteDTO {
     String CharCode;
     Double Value;
+    char sign;
 }
