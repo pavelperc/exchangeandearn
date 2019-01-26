@@ -40,17 +40,28 @@ public class CBController {
     @GetMapping("/cbcurrentcourse")
     public ValCursDTO allCurrentCourse(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = LocalDate.now().format(formatter);
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
 
-        ValCurs exchangeRate = JAXB.unmarshal(UrlCBDaily + "date_req=" + date, ValCurs.class);
+        ValCurs exchangeRateToday = JAXB.unmarshal(UrlCBDaily + "date_req=" + today.format(formatter), ValCurs.class);
+        ValCurs exchangeRateYesterday = JAXB.unmarshal(UrlCBDaily + "date_req=" + yesterday.format(formatter), ValCurs.class);
 
         ArrayList<ValuteDTO> valutes = new ArrayList<>();
-        for (Valute valute : exchangeRate.getValutes()){
-            //Зделать чтение названия валют из БД
+        ArrayList<Valute> valsT = exchangeRateToday.getValutes();
+        ArrayList<Valute> valsY = exchangeRateYesterday.getValutes();
+        for (int i = 0; i< valsT.size(); i++){
+            Valute valuteT = valsT.get(i);
+            Valute valuteY = valsY.get(i);
 
-            if (currencyRepo.findByName(valute.getCharCode()).isPresent()){
-                double value = 1.0 * Double.parseDouble(valute.getValue().replace(",","."))/Double.parseDouble(valute.getNominal());
-                valutes.add(new ValuteDTO(valute.getCharCode(), value));
+            if (currencyRepo.findByName(valuteT.getCharCode()).isPresent()){
+                double valueT = 1.0 * Double.parseDouble(valuteT.getValue().replace(",","."))/Double.parseDouble(valuteT.getNominal());
+                char sign = '+';
+                if (valuteT.getCharCode().equals(valuteY.getCharCode())) {
+                    double valueY = 1.0 * Double.parseDouble(valuteY.getValue().replace(",", ".")) / Double.parseDouble(valuteY.getNominal());
+                    if (valueT-valueY < 0)
+                        sign = '-';
+                }
+                valutes.add(new ValuteDTO(valuteT.getCharCode(), valueT,sign));
             }
         }
 
