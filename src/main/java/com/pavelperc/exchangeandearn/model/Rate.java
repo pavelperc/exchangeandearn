@@ -16,7 +16,6 @@ public class Rate {
     private long id;
     
     private double sell;
-    
     private double buy;
     
     
@@ -26,5 +25,11 @@ public class Rate {
     public Rate(double sell, double buy) {
         this.sell = sell;
         this.buy = buy;
+    }
+    
+    
+    public Rate(double sellAndBuy) {
+        this.sell = sellAndBuy;
+        this.buy = sellAndBuy;
     }
 }

@@ -8,12 +8,14 @@ import com.pavelperc.exchangeandearn.repo.AccountRepo;
 import com.pavelperc.exchangeandearn.repo.CurrencyRepo;
 import com.pavelperc.exchangeandearn.repo.RateRepo;
 import com.pavelperc.exchangeandearn.repo.UserRepo;
+import com.pavelperc.exchangeandearn.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
@@ -33,6 +35,8 @@ public class DataLoader implements ApplicationRunner {
     @Autowired
     RateRepo rateRepo;
     
+    @Autowired
+    AccountService accountService;
     
     @Transactional // FIXES something..
     @Override
@@ -41,8 +45,8 @@ public class DataLoader implements ApplicationRunner {
         org.h2.tools.Server.createTcpServer().start();
         
         
-        User user1 = new User("user", "password", ImmutableSet.of(Role.USER));
-        User user2 = new User("admin", "admin", ImmutableSet.of(USER, ADMIN));
+        User user1 = new User("u", "p", ImmutableSet.of(Role.USER));
+        User user2 = new User("a", "a", ImmutableSet.of(USER, ADMIN));
         
         user1 = userRepo.save(user1);
         user2 = userRepo.save(user2);
@@ -58,13 +62,34 @@ public class DataLoader implements ApplicationRunner {
         
 //        if (true) return;
         
-        Account rubAcc = new Account(user1, "123", rub, 200);
+        Account rubAcc = new Account(user1, "123", rub, 2000);
         Account eurAcc = new Account(user1, "456", eur, 0);
         Account usdAcc = new Account(user1, "789", usd, 0);
         
         rubAcc = accountRepo.save(rubAcc);
         eurAcc = accountRepo.save(eurAcc);
         usdAcc = accountRepo.save(usdAcc);
+        
+        // TODO add rates in param, because the time is fake!!
+        
+        LocalDateTime[] times = {
+                LocalDateTime.of(2019, Month.JANUARY, 20, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 21, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 22, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 23, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 24, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0)
+        };
+        
+        
+        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 100/*rub*/, times[0], new Rate(1), new Rate(70));
+        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 200/*rub*/, times[1], new Rate(1), new Rate(80));
+        
+        accountService.exchange(eurAcc.getId(), rubAcc.getId(), 1/*eur*/, times[1], new Rate(60), new Rate(1));
+        
+        
+        accountService.exchange(rubAcc.getId(), usdAcc.getId(), 10/*rub*/, times[2], new Rate(1), new Rate(80));
+        
         
         
         

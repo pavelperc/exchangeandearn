@@ -1,13 +1,16 @@
 package com.pavelperc.exchangeandearn.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 /**
- * History of transactions.
+ * History of transactions. Операция перевода валюты.
  */
+@NoArgsConstructor
 @Entity
 @Data
 public class Exchange {
@@ -16,28 +19,50 @@ public class Exchange {
     private long id;
     
     @ManyToOne
-    private Account account;
+    private Account accFrom;
+    @ManyToOne
+    private Account accTo;
+    
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Rate rateTo;
+    
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Rate rateFrom;
     
     private LocalDateTime time;
     
-    @OneToOne(cascade = {CascadeType.ALL})
-    private Rate rate;
-    
     /**
-     * Added money. could be negative. The currency is from account.
+     * Added MONEY. ALWAYS POSITIVE. Currency is from accFrom,
      */
-    private Double added;
+    @Min(value = 0L, message = "The value must be positive")
+    private Double addedMoney;
     
     
-    private boolean isUsefulForPrediction = true;
+//    double getAddedMoneyInFinalCurrency() { // TODO getAddedMoneyInFinalCurrency
+//        // in initial caurrency
+//        double money = addedMoney;
+//        money *= rateTo.getSell();
+//        
+//        
+//        
+//        return addedMoney / rate
+//    }
     
-    public Exchange() {
-    }
+    private boolean usefulForPrediction = true;
     
-    public Exchange(Account account, LocalDateTime time, Double added, Rate rate) {
-        this.account = account;
+    public Exchange(Account accFrom,
+                    Account accTo,
+                    Rate rateFrom,
+                    Rate rateTo,
+                    LocalDateTime time,
+                    @Min(value = 0L, message = "The value must be positive") Double addedMoney,
+                    boolean usefulForPrediction) {
+        this.accFrom = accFrom;
+        this.accTo = accTo;
+        this.rateTo = rateTo;
+        this.rateFrom = rateFrom;
         this.time = time;
-        this.added = added;
-        this.rate = rate;
+        this.addedMoney = addedMoney;
+        this.usefulForPrediction = usefulForPrediction;
     }
 }
