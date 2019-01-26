@@ -22,6 +22,8 @@ public class Account {
     @Column(unique = true)
     private String number;
     
+    private Double money;
+    
     @ManyToOne
     private Currency currency;
     
@@ -29,9 +31,20 @@ public class Account {
     }
     
     
-    public Account(User user, String number, Currency currency) {
+    public Account(User user, String number, Currency currency, double money) {
         this.user = user;
         this.number = number;
         this.currency = currency;
+        this.money = money;
+    }
+    
+    public void takeMoney(double delta) {
+        if (money < delta)
+            throw new IllegalStateException("Not enough money. Can't take " + delta + " from " + toString());
+        money -= delta;
+    }
+    
+    public void putMoney(double delta) {
+        money += delta;
     }
 }

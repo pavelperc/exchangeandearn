@@ -1,7 +1,8 @@
 package com.pavelperc.exchangeandearn.controller;
 
-import com.pavelperc.exchangeandearn.exceptions.AccessForbiddenException;
+import com.pavelperc.exchangeandearn.model.Rate;
 import com.pavelperc.exchangeandearn.model.User;
+import com.pavelperc.exchangeandearn.repo.RateRepo;
 import com.pavelperc.exchangeandearn.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,24 +11,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pavelperc.exchangeandearn.model.Role.ADMIN;
 
 @RestController
-@RequestMapping("api")
-public class MainController {
+@RequestMapping("api/rate")
+public class RateController {
     
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    RateRepo rateRepo;
     
-    @GetMapping
-//    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"}) // doesn't work!!!!!
-    List<User> allUsers(Principal principal) {
+    
+    
+    @GetMapping("/user")
+    User getUser(Principal principal) {
         User currentUser = userRepo.findByLogin(principal.getName()).get();
         
-        if (!currentUser.getRoles().contains(ADMIN))
-            throw new AccessForbiddenException("No permission to see all users");
-        
-        return userRepo.findAll();
+        return  currentUser;
     }
+    
+    
+    @GetMapping("/admins")
+    List<User> allAdmins() {
+        return userRepo.findAll().stream().filter(user -> user.getRoles().contains(ADMIN)).collect(Collectors.toList());
+    }
+    
+    
+    
+    
 }

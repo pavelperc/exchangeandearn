@@ -1,11 +1,15 @@
 package com.pavelperc.exchangeandearn.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/** History of transactions. */
+/**
+ * History of transactions.
+ */
+@Entity
+@Data
 public class Exchange {
     @Id
     @GeneratedValue
@@ -16,9 +20,24 @@ public class Exchange {
     
     private LocalDateTime time;
     
-    @ManyToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Rate rate;
     
-    /** Added money. could be negative. The currency is from account.*/
+    /**
+     * Added money. could be negative. The currency is from account.
+     */
     private Double added;
+    
+    
+    private boolean isUsefulForPrediction = true;
+    
+    public Exchange() {
+    }
+    
+    public Exchange(Account account, LocalDateTime time, Double added, Rate rate) {
+        this.account = account;
+        this.time = time;
+        this.added = added;
+        this.rate = rate;
+    }
 }

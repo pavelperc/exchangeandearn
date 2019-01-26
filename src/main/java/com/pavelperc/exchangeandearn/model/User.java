@@ -30,6 +30,9 @@ public class User {
     }
     
     
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    Set<Account> accounts;
+    
     
     public User(String login, String password, Set<Role> roles) {
         this.login = login;

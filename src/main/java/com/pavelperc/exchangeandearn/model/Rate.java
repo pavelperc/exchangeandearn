@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+
+/** One to one for each exchange */
 @Entity
 @Data
 public class Rate {
@@ -13,15 +15,16 @@ public class Rate {
     @GeneratedValue
     private long id;
     
-    private LocalDateTime time;
-    
-    @ManyToOne
-    private Currency currency;
-    
     private double sell;
     
     private double buy;
     
     
+    public Rate() {
+    }
     
+    public Rate(double sell, double buy) {
+        this.sell = sell;
+        this.buy = buy;
+    }
 }
