@@ -47,9 +47,9 @@ public class DataLoader implements ApplicationRunner {
         user1 = userRepo.save(user1);
         user2 = userRepo.save(user2);
         
-        Currency rub = new Currency("RUB");
-        Currency eur = new Currency("EUR");
-        Currency usd = new Currency("USD");
+        Currency rub = new Currency("RUB","0");
+        Currency eur = new Currency("EUR","R01239");
+        Currency usd = new Currency("USD","R01235");
         rub = currencyRepo.save(rub);
         eur = currencyRepo.save(eur);
         usd = currencyRepo.save(usd);

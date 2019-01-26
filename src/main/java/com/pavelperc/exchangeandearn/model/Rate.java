@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
-/** One to one for each exchange */
+/** One to one for each exchange. Курс валют. Относительно рубля. */
 @Entity
 @Data
 public class Rate {
