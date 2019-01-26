@@ -1,5 +1,6 @@
 package com.pavelperc.exchangeandearn.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,8 +13,12 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
+    
+    @Column(unique = true)
     private String login;
+    
     private String password;
+    
     private Boolean active = true;
     
     
