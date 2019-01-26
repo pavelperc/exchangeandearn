@@ -26,4 +26,10 @@ public class Rate {
         this.sell = sell;
         this.buy = buy;
     }
+    
+    
+    public Rate(double sellAndBuy) {
+        this.sell = sellAndBuy;
+        this.buy = sellAndBuy;
+    }
 }

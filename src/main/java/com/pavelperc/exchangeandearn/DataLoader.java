@@ -15,6 +15,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
@@ -70,9 +71,26 @@ public class DataLoader implements ApplicationRunner {
         usdAcc = accountRepo.save(usdAcc);
         
         // TODO add rates in param, because the time is fake!!
-        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 10/*rub*/, LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0));
-        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 20/*rub*/, LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0));
-        accountService.exchange(rubAcc.getId(), usdAcc.getId(), 10/*rub*/, LocalDateTime.of(2019, Month.JANUARY, 26, 0, 0, 0));
+        
+        LocalDateTime[] times = {
+                LocalDateTime.of(2019, Month.JANUARY, 20, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 21, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 22, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 23, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 24, 0, 0, 0),
+                LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0)
+        };
+        
+        
+        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 100/*rub*/, times[0], new Rate(1), new Rate(70));
+        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 200/*rub*/, times[1], new Rate(1), new Rate(80));
+        
+        accountService.exchange(eurAcc.getId(), rubAcc.getId(), 1/*eur*/, times[1], new Rate(60), new Rate(1));
+        
+        
+        accountService.exchange(rubAcc.getId(), usdAcc.getId(), 10/*rub*/, times[2], new Rate(1), new Rate(80));
+        
+        
         
         
 //        List<Exchange> exchanges = new ArrayList<Exchange>() {{

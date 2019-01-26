@@ -33,15 +33,17 @@ public class AccountService {
     public void exchange(Long accFromiD,
                          Long accToId,
                          @Min(value = 0L, message = "The value must be positive") double initialMoney,
-                         LocalDateTime time
+                         LocalDateTime time,
+                         Rate rateFrom,
+                         Rate rateTo
     ) {
         
         Account accFrom = accountRepo.findById(accFromiD).get();
         Account accTo = accountRepo.findById(accToId).get();
-        
-        Rate rateFrom = new Rate(1, 100); // TODO get currency
-        
-        Rate rateTo = new Rate(100, 100);
+//        
+//        Rate rateFrom = new Rate(1, 100); // TODO get currency
+//        
+//        Rate rateTo = new Rate(100, 100);
         
         accFrom.takeMoney(initialMoney);
         
