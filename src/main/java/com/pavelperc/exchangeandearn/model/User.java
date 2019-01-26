@@ -21,6 +21,9 @@ public class User {
     
     private Boolean active = true;
     
+    private String firstName = "";
+    private String middleName = "";
+    private String lastName = "";
     
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

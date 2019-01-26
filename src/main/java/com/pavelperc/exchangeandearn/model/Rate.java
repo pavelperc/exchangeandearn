@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
-/** One to one for each exchange */
+/** One to one for each exchange. Курс */
 @Entity
 @Data
 public class Rate {
@@ -16,7 +16,6 @@ public class Rate {
     private long id;
     
     private double sell;
-    
     private double buy;
     
     
