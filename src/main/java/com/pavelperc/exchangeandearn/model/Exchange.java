@@ -1,5 +1,6 @@
 package com.pavelperc.exchangeandearn.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,16 +38,39 @@ public class Exchange {
     @Min(value = 0L, message = "The value must be positive")
     private Double addedMoney;
     
+    @JsonProperty
+    double getMoneyInRubles() {
+        if (accFrom.getCurrency().getName().equals("RUB")) {
+            return addedMoney;
+        } else if (accTo.getCurrency().getName().equals("RUB")) {
+            return getAddedMoneyInFinalCurrency();
+        } else {
+            throw new IllegalStateException("No currency in rubles.");
+        }
+    }
     
-//    double getAddedMoneyInFinalCurrency() { // TODO getAddedMoneyInFinalCurrency
-//        // in initial caurrency
-//        double money = addedMoney;
-//        money *= rateTo.getSell();
-//        
-//        
-//        
-//        return addedMoney / rate
-//    }
+    @JsonProperty
+    double getMoneyForeign() {
+        if (accFrom.getCurrency().getName().equals("RUB")) {
+            return getAddedMoneyInFinalCurrency();
+        } else {
+            return addedMoney;
+        }
+    }
+    
+    @JsonProperty
+    double getAddedMoneyInFinalCurrency() {
+        // money in initial currency
+        double money = addedMoney;
+        
+        // money in rubles
+        money *= rateFrom.getSell();
+    
+        // money in final currency
+        money /= rateTo.getBuy();
+        
+        return money;
+    }
     
     private boolean usefulForPrediction = true;
     
