@@ -8,7 +8,6 @@ import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.pavelperc.exchangeandearn.dto.ValCursDTO;
@@ -21,7 +20,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/currency")
@@ -59,14 +57,14 @@ public class CBController {
         return new ValCursDTO(valutes);
     }
 
-    @PostMapping("/cbcurrencydynamics")
+    @GetMapping("/cbcurrencydynamics")
     public ArrayList<ValCurs2> currencyDynamics(RequestForm form){
         String url = UrlCBDynamic + "date_req1=" + form.getFrom() + "&date_req2=" + form.getTo() + "&VAL_NM_RQ=";
         ArrayList<ValCurs2> dynamic = new ArrayList<>();
         for (String type: form.getType()) {
             var name = currencyRepo.findByName(type);
             if(name.isPresent()) {
-                ValCurs2 a = JAXB.unmarshal(UrlCBDynamic + "date_req1=" + form.getFrom() + "&date_req2=" + form.getTo() + "&VAL_NM_RQ=" + name, ValCurs2.class);
+                ValCurs2 a = JAXB.unmarshal(UrlCBDynamic + "date_req1=" + form.getFrom() + "&date_req2=" + form.getTo() + "&VAL_NM_RQ=" + name.get().getCentralBankId(), ValCurs2.class);
                 dynamic.add(a);
             }
         }
