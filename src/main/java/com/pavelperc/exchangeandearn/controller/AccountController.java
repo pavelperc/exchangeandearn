@@ -42,6 +42,7 @@ public class AccountController {
     }
     
     
+    // Should be put mapping, but we don't have enough time to test
     @GetMapping("/exchange/{id1}{id2}/{money}")
     Exchange transaction(@PathVariable("id1") Account rub,
                         @PathVariable("id2") Account foreign, 
@@ -55,7 +56,6 @@ public class AccountController {
         ValuteDto dto = cbController.allCurrentCourse().getValutes().stream()
                 .filter(valuteDto -> valuteDto.getCharCode().equals(currStr))
                 .findFirst().get();
-        
         Rate rate = new Rate(dto.getValue());
         
         return accountService.exchange(rub.getId(), foreign.getId(), money, LocalDateTime.now(), rate);

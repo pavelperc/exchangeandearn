@@ -31,7 +31,7 @@ public class AccountService {
     
     
     public @Nullable
-    Double getProfit(Account rubAcc, Account foreignAcc, Rate rateForeign, double sumOfExchange/*in foreign*/) {
+    Double getProfit(Account rubAcc, Account foreignAcc, Rate rateForeign, double sumOfExchange/*in foreign*/, boolean saveDisabled) {
         
         if (sumOfExchange < 0) { // toRubles
             double diffInRubles = 0;
@@ -63,7 +63,11 @@ public class AccountService {
                     break;
                 }
             }
-            return diffInRubles / -sumOfExchange;
+            if (saveDisabled) {
+                exchangeRepo.saveAll(history);
+            }
+            
+            return diffInRubles / sumOfExchange;
         } else { // to Foreign
     
             double diffInForeign = 0;
@@ -95,6 +99,9 @@ public class AccountService {
                     break;
                 }
             }
+            if (saveDisabled) {
+                exchangeRepo.saveAll(history);
+            }
             return diffInForeign / sumOfExchange;
         }
         
@@ -122,7 +129,7 @@ public class AccountService {
         accForeign.putMoney(initialMoney);
         
 //        Double profit = getProfit();
-        Double profit = getProfit(accRub, accForeign, rateForeign, initialMoney);
+        Double profit = getProfit(accRub, accForeign, rateForeign, initialMoney, true);
         
         if (profit == null)
             profit = 0.0;
