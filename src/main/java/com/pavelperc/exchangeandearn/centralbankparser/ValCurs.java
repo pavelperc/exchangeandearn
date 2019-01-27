@@ -14,9 +14,9 @@ import java.util.ArrayList;
 @ToString
 public class ValCurs {
     @XmlAttribute(name = "Date")
-    String date;
+    private String date;
     @XmlAttribute(name = "name")
-    String name;
+    private String name;
     @XmlElement(name = "Valute")
-    ArrayList<Valute> valutes;
+    private ArrayList<Valute> valutes;
 }

@@ -14,13 +14,13 @@ import java.util.ArrayList;
 @ToString
 public class ValCurs2 {
     @XmlAttribute(name = "ID")
-    String id;
+    private String id;
     @XmlAttribute(name = "DateRange1")
-    String dataRange1;
+    private String dataRange1;
     @XmlAttribute(name = "DateRange2")
-    String dataRange2;
+    private String dataRange2;
     @XmlAttribute(name = "name")
-    String name;
+    private String name;
     @XmlElement(name = "Record")
-    ArrayList<Record> records;
+    private ArrayList<Record> records;
 }
