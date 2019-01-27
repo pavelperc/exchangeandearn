@@ -1,7 +1,9 @@
 package com.pavelperc.exchangeandearn.controller;
 
 import com.pavelperc.exchangeandearn.model.Currency;
+import com.pavelperc.exchangeandearn.model.Exchange;
 import com.pavelperc.exchangeandearn.model.User;
+import com.pavelperc.exchangeandearn.repo.ExchangeRepo;
 import com.pavelperc.exchangeandearn.repo.UserRepo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -24,22 +27,17 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/stat")
 public class StatisticController {
 
+    
     @Autowired
-    UserRepo userRepo;
+    ExchangeRepo exchangeRepo;
 
     @GetMapping("")
     public Func graphicBuilder(
-            @RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timeFrom,
-            @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timeTo,
             @RequestParam(value = "currency_id", required = false) Currency currency,
             Principal principal
     ) {
-        if (timeFrom == null)
-            timeFrom = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
-        if (timeTo == null)
-            timeTo = LocalDateTime.of(3000, 1, 1, 1, 1, 1, 1);
+//        List<Exchange> ls= exchangeRepo.filterForeignIn()
 
-        User currentUser = userRepo.findByLogin(principal.getName()).get();
         double[] a = {1.0, 2.0, 3.0};
         double[] b = {1.0, 2.0, 3.0};
 

@@ -44,12 +44,15 @@ public class Account {
     }
     
     public void takeMoney(double delta) {
-        if (money < delta)
+        if (money - delta < 0)
             throw new IllegalStateException("Not enough money. Can't take " + delta + " from " + toString());
         money -= delta;
     }
     
     public void putMoney(double delta) {
+        if (money + delta < 0)
+            throw new IllegalStateException("Not enough money. Can't put " + delta + " from " + toString());
+        
         money += delta;
     }
 }

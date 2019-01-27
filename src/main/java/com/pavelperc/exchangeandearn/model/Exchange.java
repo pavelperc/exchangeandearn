@@ -20,72 +20,36 @@ public class Exchange {
     private long id;
     
     @ManyToOne
-    private Account accFrom;
-    @ManyToOne
-    private Account accTo;
+    private Account accForeign;
+    
     
     @OneToOne(cascade = {CascadeType.ALL})
-    private Rate rateTo;
-    
-    @OneToOne(cascade = {CascadeType.ALL})
-    private Rate rateFrom;
+    private Rate rateForeign;
     
     private LocalDateTime time;
     
-    /**
-     * Added MONEY. ALWAYS POSITIVE. Currency is from accFrom,
-     */
-    @Min(value = 0L, message = "The value must be positive")
+    private double profit;
+    
+    /** Added MONEY. Always in foreign, may be negative*/
     private Double addedMoney;
     
     @JsonProperty
-    double getMoneyInRubles() {
-        if (accFrom.getCurrency().getName().equals("RUB")) {
-            return addedMoney;
-        } else if (accTo.getCurrency().getName().equals("RUB")) {
-            return getAddedMoneyInFinalCurrency();
-        } else {
-            throw new IllegalStateException("No currency in rubles.");
-        }
-    }
-    
-    @JsonProperty
-    double getMoneyForeign() {
-        if (accFrom.getCurrency().getName().equals("RUB")) {
-            return getAddedMoneyInFinalCurrency();
-        } else {
-            return addedMoney;
-        }
-    }
-    
-    @JsonProperty
-    double getAddedMoneyInFinalCurrency() {
-        // money in initial currency
-        double money = addedMoney;
-        
-        // money in rubles
-        money *= rateFrom.getSell();
-    
-        // money in final currency
-        money /= rateTo.getBuy();
-        
-        return money;
+    public double getMoneyInRubles() {
+        return addedMoney * rateForeign.getSell();
     }
     
     private boolean usefulForPrediction = true;
     
-    public Exchange(Account accFrom,
-                    Account accTo,
-                    Rate rateFrom,
-                    Rate rateTo,
-                    LocalDateTime time,
-                    @Min(value = 0L, message = "The value must be positive") Double addedMoney,
-                    boolean usefulForPrediction) {
-        this.accFrom = accFrom;
-        this.accTo = accTo;
-        this.rateTo = rateTo;
-        this.rateFrom = rateFrom;
+    public Exchange(Account accForeign,
+                    Rate rateForeign,
+                    LocalDateTime time, 
+                    Double addedMoney,
+                    boolean usefulForPrediction,
+                    double profit) {
+        this.accForeign = accForeign;
+        this.rateForeign = rateForeign;
         this.time = time;
+        this.profit = profit;
         this.addedMoney = addedMoney;
         this.usefulForPrediction = usefulForPrediction;
     }

@@ -23,7 +23,9 @@ import java.util.*;
 import static com.pavelperc.exchangeandearn.model.Role.ADMIN;
 import static com.pavelperc.exchangeandearn.model.Role.USER;
 
-/** Loads the initial data to database.*/
+/**
+ * Loads the initial data to database.
+ */
 @Component
 public class DataLoader implements ApplicationRunner {
     @Autowired
@@ -51,15 +53,15 @@ public class DataLoader implements ApplicationRunner {
         user1 = userRepo.save(user1);
         user2 = userRepo.save(user2);
         
-        Currency rub = new Currency("RUB","0");
-        Currency eur = new Currency("EUR","R01239");
-        Currency usd = new Currency("USD","R01235");
+        Currency rub = new Currency("RUB", "0");
+        Currency eur = new Currency("EUR", "R01239");
+        Currency usd = new Currency("USD", "R01235");
         rub = currencyRepo.save(rub);
         eur = currencyRepo.save(eur);
         usd = currencyRepo.save(usd);
-        
+
 //        currencyRepo.saveAll(Arrays.asList(rub, eur, usd));
-        
+
 //        if (true) return;
         
         Account rubAcc = new Account(user1, "123", rub, 2000);
@@ -80,34 +82,10 @@ public class DataLoader implements ApplicationRunner {
                 LocalDateTime.of(2019, Month.JANUARY, 24, 0, 0, 0),
                 LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0)
         };
+        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 30/*eur*/, times[1], new Rate(10));
         
-        
-        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 100/*rub*/, times[0], new Rate(1), new Rate(70));
-        accountService.exchange(rubAcc.getId(), eurAcc.getId(), 200/*rub*/, times[1], new Rate(1), new Rate(80));
-        
-        accountService.exchange(eurAcc.getId(), rubAcc.getId(), 1/*eur*/, times[1], new Rate(60), new Rate(1));
-        
-        
-        accountService.exchange(rubAcc.getId(), usdAcc.getId(), 10/*rub*/, times[2], new Rate(1), new Rate(80));
-        
-        
-        
-        
-//        List<Exchange> exchanges = new ArrayList<Exchange>() {{
-//            
-//            add(new Exchange(rubAcc, LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0), 200))
-//            
-//            add(new Rate(LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0), eur, 50, 50));
-//            add(new Rate(LocalDateTime.of(2019, Month.JANUARY, 26, 0, 0, 0), eur, 60, 60));
-//            add(new Rate(LocalDateTime.of(2019, Month.JANUARY, 27, 0, 0, 0), eur, 70, 70));
-//            
-//            add(new Rate(LocalDateTime.of(2019, Month.JANUARY, 25, 0, 0, 0), usd, 40, 40));
-//            add(new Rate(LocalDateTime.of(2019, Month.JANUARY, 26, 0, 0, 0), usd, 50, 50));
-//            add(new Rate(LocalDateTime.of(2019, Month.JANUARY, 27, 0, 0, 0), usd, 60, 60));
-//        }};
-//        
-//        rates = rateRepo.saveAll(rates);
-//        
-        
+        accountService.exchange(rubAcc.getId(), rubAcc.getId(), -10/*eur*/, times[2], new Rate(20));
+        accountService.exchange(eurAcc.getId(), rubAcc.getId(), -10/*eur*/, times[3], new Rate(30));
+        accountService.exchange(eurAcc.getId(), rubAcc.getId(), -10/*eur*/, times[4], new Rate(40));
     }
 }
