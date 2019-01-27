@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
 import javax.transaction.Transactional;
-import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -105,12 +104,12 @@ public class AccountService {
     
     
     @Transactional
-    public void exchange(Long accRubId,
-                         Long accForeignId,
-                         // in foreign
-                         double initialMoney,
-                         LocalDateTime time,
-                         Rate rateForeign
+    public Exchange exchange(Long accRubId,
+                             Long accForeignId,
+                             // in foreign
+                             double initialMoney,
+                             LocalDateTime time,
+                             Rate rateForeign
     ) {
         
         Account accRub = accountRepo.findById(accRubId).get();
@@ -130,10 +129,10 @@ public class AccountService {
         
         Exchange exchange = new Exchange(accForeign, rateForeign, time, initialMoney, true, profit);
         
-        exchangeRepo.save(exchange);
+        exchange = exchangeRepo.save(exchange);
         accountRepo.save(accRub);
         accountRepo.save(accForeign);
         
-        
+        return exchange;
     }
 }

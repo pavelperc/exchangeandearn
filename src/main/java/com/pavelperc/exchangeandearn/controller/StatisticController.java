@@ -1,19 +1,18 @@
 package com.pavelperc.exchangeandearn.controller;
 
+import com.pavelperc.exchangeandearn.model.Account;
 import com.pavelperc.exchangeandearn.model.Currency;
 import com.pavelperc.exchangeandearn.model.Exchange;
 import com.pavelperc.exchangeandearn.model.User;
 import com.pavelperc.exchangeandearn.repo.ExchangeRepo;
 import com.pavelperc.exchangeandearn.repo.UserRepo;
+import com.pavelperc.exchangeandearn.service.AccountService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -30,20 +29,29 @@ public class StatisticController {
     
     @Autowired
     ExchangeRepo exchangeRepo;
-
-    @GetMapping("")
+    
+    @Autowired
+    AccountService accountService;
+    
+    @Autowired
+    UserRepo userRepo;
+    
+    @GetMapping("{account_id}")
     public Func graphicBuilder(
-            @RequestParam(value = "currency_id", required = false) Currency currency,
+            @PathVariable("account_id") Account account,
             Principal principal
     ) {
+    
+        User currentUser = userRepo.findByLogin(principal.getName()).get();
+        
+        
+        
 //        List<Exchange> ls= exchangeRepo.filterForeignIn()
-
-        double[] a = {1.0, 2.0, 3.0};
-        double[] b = {1.0, 2.0, 3.0};
-
-        Func f = new Func(a, b);
-
-        return f;
+        
+        
+        
+        
+        return null;
     }
 
 
