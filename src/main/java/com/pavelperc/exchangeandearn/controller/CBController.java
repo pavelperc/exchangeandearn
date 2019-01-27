@@ -1,6 +1,6 @@
 package com.pavelperc.exchangeandearn.controller;
 
-import com.pavelperc.exchangeandearn.dto.ValuteDTO;
+import com.pavelperc.exchangeandearn.dto.ValuteDto;
 import com.pavelperc.exchangeandearn.form.RequestForm;
 import com.pavelperc.exchangeandearn.model.Currency;
 import com.pavelperc.exchangeandearn.repo.CurrencyRepo;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.pavelperc.exchangeandearn.dto.ValCursDTO;
+import com.pavelperc.exchangeandearn.dto.ValCursDto;
 import com.pavelperc.exchangeandearn.centralbankparser.ValCurs;
 import com.pavelperc.exchangeandearn.centralbankparser.ValCurs2;
 import com.pavelperc.exchangeandearn.centralbankparser.Valute;
@@ -38,7 +38,7 @@ public class CBController {
 
 
     @GetMapping("/cbcurrentcourse")
-    public ValCursDTO allCurrentCourse(){
+    public ValCursDto allCurrentCourse(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
@@ -46,7 +46,7 @@ public class CBController {
         ValCurs exchangeRateToday = JAXB.unmarshal(UrlCBDaily + "date_req=" + today.format(formatter), ValCurs.class);
         ValCurs exchangeRateYesterday = JAXB.unmarshal(UrlCBDaily + "date_req=" + yesterday.format(formatter), ValCurs.class);
 
-        ArrayList<ValuteDTO> valutes = new ArrayList<>();
+        ArrayList<ValuteDto> valutes = new ArrayList<>();
         ArrayList<Valute> valsT = exchangeRateToday.getValutes();
         ArrayList<Valute> valsY = exchangeRateYesterday.getValutes();
         for (int i = 0; i< valsT.size(); i++){
@@ -61,11 +61,11 @@ public class CBController {
                     if (valueT-valueY < 0)
                         sign = '-';
                 }
-                valutes.add(new ValuteDTO(valuteT.getCharCode(), valueT,sign));
+                valutes.add(new ValuteDto(valuteT.getCharCode(), valueT,sign));
             }
         }
 
-        return new ValCursDTO(valutes);
+        return new ValCursDto(valutes);
     }
 
     @GetMapping("/cbcurrencydynamics")

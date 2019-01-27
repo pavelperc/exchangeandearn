@@ -7,6 +7,6 @@ import java.util.ArrayList;
 
 @Data
 @AllArgsConstructor
-public class ValCursDTO {
-    private ArrayList<ValuteDTO> valutes;
+public class ValCursDto {
+    private ArrayList<ValuteDto> valutes;
 }
