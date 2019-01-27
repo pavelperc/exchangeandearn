@@ -1,5 +1,6 @@
 package com.pavelperc.exchangeandearn.controller;
 
+import com.pavelperc.exchangeandearn.centralbankparser.*;
 import com.pavelperc.exchangeandearn.dto.ValuteDto;
 import com.pavelperc.exchangeandearn.form.RequestForm;
 import com.pavelperc.exchangeandearn.model.Currency;
@@ -11,9 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.pavelperc.exchangeandearn.dto.ValCursDto;
-import com.pavelperc.exchangeandearn.centralbankparser.ValCurs;
-import com.pavelperc.exchangeandearn.centralbankparser.ValCurs2;
-import com.pavelperc.exchangeandearn.centralbankparser.Valute;
 
 import javax.xml.bind.JAXB;
 import java.time.LocalDate;
@@ -69,16 +67,21 @@ public class CBController {
     }
 
     @GetMapping("/cbcurrencydynamics")
-    public ArrayList<ValCurs2> currencyDynamics(RequestForm form){
+    public ExchangeRate currencyDynamics(RequestForm form){
         String url = UrlCBDynamic + "date_req1=" + form.getFrom() + "&date_req2=" + form.getTo() + "&VAL_NM_RQ=";
         ArrayList<ValCurs2> dynamic = new ArrayList<>();
-        for (String type: form.getType()) {
-            var name = currencyRepo.findByName(type);
-            if(name.isPresent()) {
-                ValCurs2 a = JAXB.unmarshal(UrlCBDynamic + "date_req1=" + form.getFrom() + "&date_req2=" + form.getTo() + "&VAL_NM_RQ=" + name.get().getCentralBankId(), ValCurs2.class);
-                dynamic.add(a);
+
+        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<>();
+        var name = currencyRepo.findByName(form.getType());
+        if(name.isPresent()) {
+            ValCurs2 a = JAXB.unmarshal(UrlCBDynamic + "date_req1=" + form.getFrom() + "&date_req2=" + form.getTo() + "&VAL_NM_RQ=" + name.get().getCentralBankId(), ValCurs2.class);
+            for (Record record : a.getRecords()){
+                dates.add(record.getDate());
+                values.add(record.getValue());
             }
         }
-        return dynamic;
+
+        return new ExchangeRate(dates, values);
     }
 }

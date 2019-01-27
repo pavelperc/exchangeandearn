@@ -12,5 +12,5 @@ import lombok.ToString;
 public class RequestForm {
     String from;
     String to;
-    String[] type;
+    String type;
 }
