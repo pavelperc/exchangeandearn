@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 @Getter
 @Setter
 @ToString
-public class ValuteDTO {
+public class ValuteDto {
     String CharCode;
     Double Value;
     char sign;
