@@ -14,10 +14,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 @ToString
 public class Valute {
     @XmlAttribute(name = "ID")
-    String id;
-    String NumCode;
-    String CharCode;
-    String Nominal;
-    String Name;
-    String Value;
+    private String id;
+    private String NumCode;
+    private String CharCode;
+    private String Nominal;
+    private String Name;
+    private String Value;
 }

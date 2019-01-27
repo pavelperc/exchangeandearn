@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 @ToString
 public class Record {
     @XmlAttribute(name = "Date")
-    String date;
+    private String date;
     @XmlAttribute(name = "Id")
-    String id;
-    String Nominal;
-    String Value;
+    private String id;
+    private String Nominal;
+    private String Value;
 }
