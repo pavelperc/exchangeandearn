@@ -40,8 +40,8 @@ public class StatisticController {
             timeTo = LocalDateTime.of(3000, 1, 1, 1, 1, 1, 1);
 
         User currentUser = userRepo.findByLogin(principal.getName()).get();
-        double[] a = {1.0};
-        double[] b = {1.0};
+        double[] a = {1.0, 2.0, 3.0};
+        double[] b = {1.0, 2.0, 3.0};
 
         Func f = new Func(a, b);
 
