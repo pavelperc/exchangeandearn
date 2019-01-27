@@ -1,7 +1,6 @@
 package com.pavelperc.exchangeandearn.controller;
 
 import com.pavelperc.exchangeandearn.model.Account;
-import com.pavelperc.exchangeandearn.model.Currency;
 import com.pavelperc.exchangeandearn.model.Exchange;
 import com.pavelperc.exchangeandearn.model.User;
 import com.pavelperc.exchangeandearn.repo.ExchangeRepo;
@@ -10,13 +9,13 @@ import com.pavelperc.exchangeandearn.service.AccountService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -36,22 +35,23 @@ public class StatisticController {
     @Autowired
     UserRepo userRepo;
     
-    @GetMapping("{account_id}")
-    public Func graphicBuilder(
-            @PathVariable("account_id") Account account,
+    @GetMapping("profits/{account_id}")
+    public Object[] graphicBuilder(
+            @PathVariable("account_id") Account accForeign,
             Principal principal
     ) {
-    
         User currentUser = userRepo.findByLogin(principal.getName()).get();
         
+        List<Exchange> history = exchangeRepo.findAllByAccForeign_Id(accForeign.getId());
+        
+        history = history.stream().sorted(Comparator.comparing(Exchange::getTime)).collect(Collectors.toList());
+        
+        List<Double> profits = history.stream().map(exchange -> exchange.getProfit()).collect(Collectors.toList());
+        
+        List<LocalDateTime> dates = history.stream().map(exchange -> exchange.getTime()).collect(Collectors.toList());
         
         
-//        List<Exchange> ls= exchangeRepo.filterForeignIn()
-        
-        
-        
-        
-        return null;
+        return new Object[] {profits, dates};
     }
 
 

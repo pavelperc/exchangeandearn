@@ -63,7 +63,7 @@ public class AccountService {
                     break;
                 }
             }
-            return diffInRubles / -sumOfExchange;
+            return diffInRubles / sumOfExchange;
         } else { // to Foreign
     
             double diffInForeign = 0;

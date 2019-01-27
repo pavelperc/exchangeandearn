@@ -87,5 +87,6 @@ public class DataLoader implements ApplicationRunner {
         accountService.exchange(rubAcc.getId(), rubAcc.getId(), -10/*eur*/, times[2], new Rate(20));
         accountService.exchange(eurAcc.getId(), rubAcc.getId(), -10/*eur*/, times[3], new Rate(30));
         accountService.exchange(eurAcc.getId(), rubAcc.getId(), -10/*eur*/, times[4], new Rate(40));
+        
     }
 }
